@@ -1,6 +1,5 @@
 import prisma from '@/lib/db';
-import { redirect } from 'next/navigation';
-import React from 'react';
+import { notFound, redirect } from 'next/navigation';
 
 interface RedirectPageProps {
   params: { shortCode: string };
@@ -14,7 +13,7 @@ const RedirectPage = async ({ params }: RedirectPageProps) => {
   });
 
   if (!url) {
-    return <div>404 - URL not found</div>;
+    notFound();
   }
 
   await prisma.url.update({
