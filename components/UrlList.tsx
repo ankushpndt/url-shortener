@@ -18,8 +18,10 @@ const UrlList = () => {
   const [copiedUrl, setCopiedUrl] = useState<string>('');
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
+  const host = typeof window !== 'undefined' && location.origin
+
   const urlShortener = (code: string) => {
-    return `${process.env.NEXT_PUBLIC_BASE_URL}/${code}`;
+    return `${host}/${code}`;
   };
 
   const fetchUrls = async () => {
