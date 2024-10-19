@@ -4,14 +4,37 @@ import React, { useState } from 'react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 
-const ShortenForm = () => {
-  const [url, setUrl] = useState<string>('');
+interface ShortenFormProps {
+  handleUrlShortened: () => void;
+}
 
-  const handleSubmit = (e: React.FormEvent) => {
+const ShortenForm = ({ handleUrlShortened }: ShortenFormProps) => {
+  const [url, setUrl] = useState<string>('');
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log({url})
+    setIsLoading(true);
+    try {
+      const response = await fetch('/api/shorten', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          url,
+        }),
+      });
+      await response.json();
+      setUrl('');
+      handleUrlShortened();
+    } catch (error) {
+      console.log('Error', error);
+    } finally {
+      setIsLoading(false);
+    }
   };
-  
+
   return (
     <form onSubmit={handleSubmit} className='mb-4'>
       <div className='space-y-4'>
@@ -23,8 +46,8 @@ const ShortenForm = () => {
           value={url}
           onChange={(e) => setUrl(e.target.value)}
         />
-        <Button className='w-full p-2' type='submit'>
-          Shorten URL
+        <Button className='w-full p-2' type='submit' disabled={isLoading}>
+          {isLoading ? 'Shortening' : 'Shorten URL'}
         </Button>
       </div>
     </form>
