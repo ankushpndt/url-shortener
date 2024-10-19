@@ -18,10 +18,10 @@ const UrlList = () => {
   const [copiedUrl, setCopiedUrl] = useState<string>('');
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
-  const host = typeof window !== 'undefined' && location.origin
+  const origin = typeof window !== 'undefined' && location.origin
 
   const urlShortener = (code: string) => {
-    return `${host}/${code}`;
+    return `${origin}/${code}`;
   };
 
   const fetchUrls = async () => {
