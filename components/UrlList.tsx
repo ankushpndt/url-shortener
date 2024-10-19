@@ -53,11 +53,12 @@ const UrlList = () => {
   }, []);
 
   if (isLoading) {
+    const arr = urls ?? [1, 2, 3];
     return (
       <div className='animate-pulse'>
         <div className='h-8 bg-gray-200 rounded w-1/4 mb-4'></div>
         <ul className='space-y-2'>
-          {urls.map((url) => {
+          {arr.map((url) => {
             return (
               <li
                 key={url.id}
@@ -80,46 +81,48 @@ const UrlList = () => {
   }
 
   return (
-    <div>
-      <h2 className='text-2xl font-bold mb-2'>Recent URLs</h2>
-      <ul className='space-y-2'>
-        {urls.map((url) => {
-          return (
-            <li
-              key={url.id}
-              className='flex items-center gap-2 justify-between bg-card rounded-md text-card-foreground border p-3'
-            >
-              <Link
-                href={`/${url.shortCode}`}
-                target='_blank'
-                className='text-blue-500'
+    urls?.length > 0 && (
+      <div>
+        <h2 className='text-2xl font-bold mb-2'>Recent URLs</h2>
+        <ul className='space-y-2'>
+          {urls.map((url) => {
+            return (
+              <li
+                key={url.id}
+                className='flex items-center gap-2 justify-between bg-card rounded-md text-card-foreground border p-3'
               >
-                {urlShortener(url.shortCode)}
-              </Link>
-              <div className='flex items-center gap-3'>
-                <Button
-                  variant='ghost'
-                  size='icon'
-                  className='text-muted-foreground hover:bg-muted'
-                  onClick={() => handleCopyUrl(url.shortCode)}
+                <Link
+                  href={`/${url.shortCode}`}
+                  target='_blank'
+                  className='text-blue-500'
                 >
-                  {copied && copiedUrl === url.shortCode ? (
-                    <CheckIcon className='w-4 h-4' />
-                  ) : (
-                    <CopyIcon className='w-4 h-4' />
-                  )}
-                  <span className='sr-only'>Copy URL</span>
-                </Button>
-                <span className='flex items-center gap-2'>
-                  <EyeIcon className='h-4 w-4' />
-                  {url.visits} views
-                </span>
-              </div>
-            </li>
-          );
-        })}
-      </ul>
-    </div>
+                  {urlShortener(url.shortCode)}
+                </Link>
+                <div className='flex items-center gap-3'>
+                  <Button
+                    variant='ghost'
+                    size='icon'
+                    className='text-muted-foreground hover:bg-muted'
+                    onClick={() => handleCopyUrl(url.shortCode)}
+                  >
+                    {copied && copiedUrl === url.shortCode ? (
+                      <CheckIcon className='w-4 h-4' />
+                    ) : (
+                      <CopyIcon className='w-4 h-4' />
+                    )}
+                    <span className='sr-only'>Copy URL</span>
+                  </Button>
+                  <span className='flex items-center gap-2'>
+                    <EyeIcon className='h-4 w-4' />
+                    {url.visits} views
+                  </span>
+                </div>
+              </li>
+            );
+          })}
+        </ul>
+      </div>
+    )
   );
 };
 
