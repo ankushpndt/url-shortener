@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
+import { createShortenUrl } from '@/app/actions';
 
 interface ShortenFormProps {
   handleUrlShortened: () => void;
@@ -16,16 +17,7 @@ const ShortenForm = ({ handleUrlShortened }: ShortenFormProps) => {
     e.preventDefault();
     setIsLoading(true);
     try {
-      const response = await fetch('/api/shorten', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          url,
-        }),
-      });
-      await response.json();
+      await createShortenUrl(url.toString());
       setUrl('');
       handleUrlShortened();
     } catch (error) {

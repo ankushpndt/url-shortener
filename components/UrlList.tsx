@@ -4,6 +4,7 @@ import Link from 'next/link';
 import React, { useEffect, useState } from 'react';
 import { Button } from './ui/button';
 import { CheckIcon, CopyIcon, EyeIcon } from 'lucide-react';
+import { fetchShortenedUrls } from '@/app/actions';
 
 type Url = {
   id: string;
@@ -18,7 +19,7 @@ const UrlList = () => {
   const [copiedUrl, setCopiedUrl] = useState<string>('');
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
-  const origin = typeof window !== 'undefined' && location.origin
+  const origin = typeof window !== 'undefined' && location.origin;
 
   const urlShortener = (code: string) => {
     return `${origin}/${code}`;
@@ -26,11 +27,9 @@ const UrlList = () => {
 
   const fetchUrls = async () => {
     setIsLoading(true);
-
     try {
-      const response = await fetch('/api/urls');
-      const data = await response.json();
-      setUrls(data);
+      const res = await fetchShortenedUrls()
+      setUrls(res);
     } catch (error) {
       console.log(error);
     } finally {
@@ -55,15 +54,14 @@ const UrlList = () => {
   }, []);
 
   if (isLoading) {
-    const arr = urls ?? [1, 2, 3];
     return (
       <div className='animate-pulse'>
         <div className='h-8 bg-gray-200 rounded w-1/4 mb-4'></div>
         <ul className='space-y-2'>
-          {arr.map((url) => {
+          {[1, 2, 3].map((num) => {
             return (
               <li
-                key={url.id}
+                key={num}
                 className='flex items-center gap-2 rounded-md border bg-card p-4 text-card-foreground justify-between'
               >
                 <div className='h-4 bg-gray-200 rounded w-1/2'></div>
