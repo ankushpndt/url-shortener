@@ -6,7 +6,6 @@ import { revalidatePath } from 'next/cache';
 
 export async function createShortenUrl(content: string) {
   const shortCode = nanoid(8);
-  console.log({ content });
   await prisma.url.create({
     data: {
       originalUrl: content,
